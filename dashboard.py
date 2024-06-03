@@ -16,7 +16,6 @@ st.title("Parking Tickets Analysis Dashboard")
 st.sidebar.title("Select Graphs to Display")
 yearly_trend = st.sidebar.checkbox("Yearly Trend of Parking Tickets")
 total_fine_by_year = st.sidebar.checkbox("Total Fine Amount by Year")
-monthly_trend = st.sidebar.checkbox("Monthly Trend of Parking Tickets")
 top_locations = st.sidebar.checkbox("Top 10 Locations with Most Tickets")
 infraction_distribution = st.sidebar.checkbox("Distribution of Infraction Types")
 infraction_fines = st.sidebar.checkbox("Total Fine Amount by Infraction Type")
@@ -48,17 +47,9 @@ if total_fine_by_year:
     plt.figure(figsize=(10, 6))
     sns.lineplot(data=yearly_fines, x='Year', y='Total_Fine_Amount', marker='o', palette='viridis')
     plt.title('Total Fine Amount by Year')
+    plt.xticks(yearly_fines['Year'])
     st.pyplot(plt)
 
-if monthly_trend:
-    filtered_df['Month'] = pd.to_datetime(filtered_df['Year'].astype(str) + ' ' + '1', format='%Y %m').dt.strftime('%Y-%m')
-    monthly_tickets = filtered_df.groupby('Month')['Ticket_Count'].sum().reset_index()
-    st.subheader("Monthly Trend of Parking Tickets")
-    plt.figure(figsize=(10, 6))
-    sns.lineplot(data=monthly_tickets, x='Month', y='Ticket_Count', marker='o', palette='viridis')
-    plt.title('Monthly Trend of Parking Tickets')
-    plt.xticks(rotation=45)
-    st.pyplot(plt)
 
 if top_locations:
     st.subheader("Top 10 Locations with Most Tickets")
