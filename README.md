@@ -1,97 +1,80 @@
-# Parking Tickets Analysis
+# Parking Tickets Analysis Dashboard
 
-## Project Overview
+This project provides an interactive dashboard for analyzing parking tickets data from Toronto for the years 2017-2020. The dashboard allows users to explore various insights and trends in the data, including yearly trends, fine amounts, location-based analysis, and more.
 
-This project analyzes parking tickets data from Toronto for the years 2017-2020. The analysis focuses on finding key insights, observing trends, and identifying factors that impacted parking tickets. Recommendations are provided for the City of Toronto to improve enforcement and compliance or increase revenue.
+## Features
 
-## Table of Contents
-
-- [Project Overview](#project-overview)
-- [Data Sources](#data-sources)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Analysis](#analysis)
-- [Recommendations](#recommendations)
-- [Contributing](#contributing)
-- [License](#license)
-- [Contact](#contact)
-
-## Data Sources
-
-The data for this project was obtained from the [Toronto Open Data Portal](https://open.toronto.ca/dataset/parking-tickets/).
+- Yearly Trend of Parking Tickets
+- Total Fine Amount by Year
+- Monthly Trend of Parking Tickets
+- Top 10 Locations with Most Tickets
+- Distribution of Infraction Types
+- Total Fine Amount by Infraction Type
+- Scatter Plot: Fine Amount vs. Ticket Count by Location
+- Heat Map: Ticket Count by Location and Year
+- Heat Map: Fine Amount by Location and Year
+- Infraction Code Distribution Over the Years
 
 ## Installation
 
-### Prerequisites
+To run this project locally, follow these steps:
 
-- Python 3.x
-- Pandas library
+1. **Clone the repository:**
 
-### Setup
-
-1. Clone the repository to your local machine:
-
-    ```sh
-    git clone https://github.com/gemmap520/parking_ticket_analysis
+    ```bash
+    git clone https://github.com/gemmap520/parking_ticket_dashboard.git
+    cd parking_ticket_dashboard
     ```
 
-2. Navigate to the project directory:
+2. **Install the required packages:**
 
-    ```sh
-    cd parking_ticket_analysis
+    ```bash
+    pip install -r requirements.txt
     ```
 
-3. Install the required dependencies:
+3. **Run the Streamlit app:**
 
-    ```sh
-    pip install pandas
+    ```bash
+    streamlit run dashboard.py
     ```
 
 ## Usage
 
-1. Preprocess the data:
+Once you have the app running, you can use the sidebar to select different filters and graphs to display. The available filters include:
 
-    ```sh
-    python preprocess_large_csv.py
-    ```
+- Year range
+- Locations
+- Infraction types
 
-2. Load the processed data into Power BI for further analysis and visualization.
+You can also choose which graphs to display, including trends, distributions, scatter plots, and heat maps.
 
-## Analysis
+## Data
 
-The analysis includes:
+The data used in this project is the Toronto parking tickets data for the years 2017-2020. The dataset includes the following columns:
 
-- **Trends Over Time**: Analysis of parking ticket trends over the years 2017-2020.
-- **Location Analysis**: Identifying locations with the highest number of parking tickets.
-- **Infraction Types**: Analyzing the most common types of parking infractions.
-
-## Recommendations
-
-Based on the analysis, the following recommendations are made for the City of Toronto:
-
-1. **Increase Patrols**: Focus on areas with high violation rates.
-2. **Awareness Campaigns**: Educate the public about common infractions.
-3. **Fine Adjustments**: Adjust fine amounts to deter violations in specific areas.
+- `Year`: The year the ticket was issued
+- `Infraction_Code`: The code for the type of infraction
+- `Infraction_Description`: The description of the infraction
+- `Location`: The location where the ticket was issued
+- `Total_Fine_Amount`: The total fine amount for the ticket
+- `Ticket_Count`: The count of tickets issued
 
 ## Contributing
 
-Contributions are welcome! Please follow these steps:
-
-1. Fork the repository.
-2. Create a new branch (`git checkout -b feature-branch`).
-3. Make your changes.
-4. Commit your changes (`git commit -am 'Add new feature'`).
-5. Push to the branch (`git push origin feature-branch`).
-6. Create a new Pull Request.
+Contributions are welcome! If you have any suggestions or improvements, feel free to create a pull request or open an issue.
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License.
 
 ## Contact
 
-For any questions or feedback, please contact:
+For any questions or inquiries, please contact:
 
-- **Name**: Gemma Park
-- **Email**: gemmap520@gmail.com
+- Name: Gemma Park
+- Email: gemmap520@gmail.com
+
+## Acknowledgments
+
+Special thanks to the Toronto Open Data initiative for providing the parking tickets dataset.
 
