@@ -2,6 +2,16 @@
 
 This project provides an interactive dashboard for analyzing parking tickets data from Toronto for the years 2017-2020. The dashboard allows users to explore various insights and trends in the data, including yearly trends, fine amounts, location-based analysis, and more.
 
+## Table of Contents
+
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Data](#data)
+- [Contributing](#contributing)
+- [License](#license)
+- [Contact](#contact)
+
 ## Features
 
 - Yearly Trend of Parking Tickets
