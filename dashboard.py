@@ -2,6 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 import streamlit as st
+import matplotlib.ticker as ticker
 
 # Load the data
 df = pd.read_csv('processed_parking_tickets.csv')
@@ -19,10 +20,9 @@ total_fine_by_year = st.sidebar.checkbox("Total Fine Amount by Year")
 top_locations = st.sidebar.checkbox("Top 10 Locations with Most Tickets")
 infraction_distribution = st.sidebar.checkbox("Distribution of Infraction Types")
 infraction_fines = st.sidebar.checkbox("Total Fine Amount by Infraction Type")
-fine_vs_ticket_scatter = st.sidebar.checkbox("Scatter Plot: Fine Amount vs. Ticket Count by Location")
 heatmap_tickets = st.sidebar.checkbox("Heat Map: Ticket Count by Location and Year")
 heatmap_fines = st.sidebar.checkbox("Heat Map: Fine Amount by Location and Year")
-infraction_code_dist = st.sidebar.checkbox("Infraction Code Distribution Over the Years")
+heatmap_infraction_distribution = st.sidebar.checkbox("Heat Map: Infraction Distribution by Year and Code")
 
 # Year range selection
 min_year = int(df['Year'].min())
@@ -45,11 +45,12 @@ if total_fine_by_year:
     st.subheader("Total Fine Amount by Year")
     yearly_fines = filtered_df.groupby('Year')['Total_Fine_Amount'].sum().reset_index()
     plt.figure(figsize=(10, 6))
-    sns.lineplot(data=yearly_fines, x='Year', y='Total_Fine_Amount', marker='o', palette='viridis')
+    sns.lineplot(data=yearly_fines, x='Year', y='Total_Fine_Amount', marker='o')
     plt.title('Total Fine Amount by Year')
     plt.xticks(yearly_fines['Year'])
+    plt.ylabel('Total Fine Amount ($)')
+    plt.gca().yaxis.set_major_formatter(ticker.FuncFormatter(lambda x, _: f'{x/1e6:.0f}M'))
     st.pyplot(plt)
-
 
 if top_locations:
     st.subheader("Top 10 Locations with Most Tickets")
@@ -75,33 +76,35 @@ if infraction_fines:
     plt.title('Total Fine Amount by Infraction Type')
     st.pyplot(plt)
 
-if fine_vs_ticket_scatter:
-    st.subheader("Scatter Plot: Fine Amount vs. Ticket Count by Location")
-    plt.figure(figsize=(10, 6))
-    sns.scatterplot(data=filtered_df, x='Total_Fine_Amount', y='Ticket_Count', hue='Location', palette='viridis')
-    plt.title('Fine Amount vs. Ticket Count by Location')
-    st.pyplot(plt)
-
 if heatmap_tickets:
     st.subheader("Heat Map: Ticket Count by Location and Year")
-    heatmap_data = filtered_df.pivot_table(index='Location', columns='Year', values='Ticket_Count', aggfunc='sum', fill_value=0)
+    top_locations = filtered_df['Location'].value_counts().nlargest(10).index
+    heatmap_data = filtered_df[filtered_df['Location'].isin(top_locations)].pivot_table(
+        index='Location', columns='Year', values='Ticket_Count', aggfunc='sum', fill_value=0)
     plt.figure(figsize=(12, 8))
-    sns.heatmap(heatmap_data, cmap='viridis')
+    sns.heatmap(heatmap_data, cmap='viridis', annot=True, fmt="d")
     plt.title('Heat Map of Ticket Count by Location and Year')
+    st.pyplot(plt)
+
+if heatmap_infraction_distribution:
+    st.subheader("Heat Map: Infraction Distribution by Year")
+    
+    # Get the top 10 infraction descriptions
+    top_infractions = filtered_df.groupby('Infraction_Description')['Ticket_Count'].sum().nlargest(10).index
+    top_infraction_df = filtered_df[filtered_df['Infraction_Description'].isin(top_infractions)]
+    
+    heatmap_infraction = top_infraction_df.pivot_table(index='Infraction_Description', columns='Year', values='Ticket_Count', aggfunc='sum', fill_value=0)
+    plt.figure(figsize=(12, 8))
+    sns.heatmap(heatmap_infraction, cmap='viridis', annot=True, fmt=".1f")
+    plt.title('Heat Map of Top 10 Infraction Distribution by Year and Code')
     st.pyplot(plt)
 
 if heatmap_fines:
     st.subheader("Heat Map: Fine Amount by Location and Year")
-    heatmap_fines = filtered_df.pivot_table(index='Location', columns='Year', values='Total_Fine_Amount', aggfunc='sum', fill_value=0)
+    top_locations = filtered_df['Location'].value_counts().nlargest(10).index
+    heatmap_fines = filtered_df[filtered_df['Location'].isin(top_locations)].pivot_table(
+        index='Location', columns='Year', values='Total_Fine_Amount', aggfunc='sum', fill_value=0)
     plt.figure(figsize=(12, 8))
-    sns.heatmap(heatmap_fines, cmap='viridis')
+    sns.heatmap(heatmap_fines, cmap='viridis', annot=True, fmt=".1f")
     plt.title('Heat Map of Fine Amount by Location and Year')
-    st.pyplot(plt)
-
-if infraction_code_dist:
-    st.subheader("Infraction Code Distribution Over the Years")
-    infraction_code_dist = filtered_df.groupby(['Year', 'Infraction_Code'])['Ticket_Count'].sum().unstack().fillna(0)
-    plt.figure(figsize=(12, 8))
-    sns.heatmap(infraction_code_dist, cmap='viridis')
-    plt.title('Infraction Code Distribution Over the Years')
     st.pyplot(plt)
