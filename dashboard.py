@@ -78,18 +78,18 @@ if infraction_fines:
 
 if heatmap_tickets:
     st.subheader("Heat Map: Ticket Count by Location and Year")
-    top_locations = filtered_df['Location'].value_counts().nlargest(10).index
+    top_locations = filtered_df.groupby('Location')['Ticket_Count'].sum().nlargest(10).index
     heatmap_data = filtered_df[filtered_df['Location'].isin(top_locations)].pivot_table(
         index='Location', columns='Year', values='Ticket_Count', aggfunc='sum', fill_value=0)
     plt.figure(figsize=(12, 8))
     sns.heatmap(heatmap_data, cmap='viridis', annot=True, fmt="d")
     plt.title('Heat Map of Ticket Count by Location and Year')
+    plt.xlabel('Year')
+    plt.ylabel('Location')
     st.pyplot(plt)
 
 if heatmap_infraction_distribution:
     st.subheader("Heat Map: Infraction Distribution by Year")
-    
-    # Get the top 10 infraction descriptions
     top_infractions = filtered_df.groupby('Infraction_Description')['Ticket_Count'].sum().nlargest(10).index
     top_infraction_df = filtered_df[filtered_df['Infraction_Description'].isin(top_infractions)]
     
@@ -101,7 +101,7 @@ if heatmap_infraction_distribution:
 
 if heatmap_fines:
     st.subheader("Heat Map: Fine Amount by Location and Year")
-    top_locations = filtered_df['Location'].value_counts().nlargest(10).index
+    top_infractions = filtered_df.groupby('Location')['Ticket_Count'].sum().nlargest(10).index
     heatmap_fines = filtered_df[filtered_df['Location'].isin(top_locations)].pivot_table(
         index='Location', columns='Year', values='Total_Fine_Amount', aggfunc='sum', fill_value=0)
     plt.figure(figsize=(12, 8))
